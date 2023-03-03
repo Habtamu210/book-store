@@ -1,28 +1,16 @@
-import { Route, Link, Routes } from 'react-router-dom';
-import Books from './components/book';
-import Catagories from './components/catgories';
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
+import BookContainer from './components/bookContainer';
+import NavBar from './components/navBar';
+import Categories from './pages/catgories';
 
 function App() {
   return (
     <>
-      <nav>
-        <h1>
-          Bookstore Maya
-        </h1>
-        <ul>
-          <li>
-            <Link to="/"> Books</Link>
-          </li>
-          <li>
-            <Link to="/categories">Categories</Link>
-          </li>
-
-        </ul>
-      </nav>
+      <NavBar />
       <Routes>
-        <Route path="/" element={<Books />} />
-        <Route path="/Categories" element={<Catagories />} />
+        <Route path="/" element={<BookContainer />} />
+        <Route path="/categories" element={<Categories />} />
       </Routes>
     </>
   );
