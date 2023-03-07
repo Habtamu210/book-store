@@ -1,27 +1,7 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-
-const Book = (props) => {
-  const { title, author } = props;
-  return (
-    <li>
-      <h2 style={{ marginBottom: 0, paddingBottom: 0 }}>
-        {' '}
-        {title}
-        {' '}
-      </h2>
-      <p style={{ margin: 0, padding: 0 }}>
-        {' '}
-        {author}
-        {' '}
-      </p>
-      <button type="button">Remove</button>
-    </li>
-  );
-};
-
-import PropTypes from 'prop-types';
-import { removeBook } from '../redux/books/books';
+import { removeBook } from '../redux/books/bookSlice';
 
 const Book = (props) => {
   const { id, title, author } = props;

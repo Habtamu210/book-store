@@ -19,7 +19,7 @@ const initialState = [
     title: 'The Selfish Gene',
     author: 'Richard Dawkins',
     category: 'Nonfiction',
-  }
+  },
 ];
 
 // Reducer
