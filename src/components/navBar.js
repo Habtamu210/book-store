@@ -1,43 +1,16 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
+import styles from './styles/navBar.css';
 
-const Navbar = () => {
-  const links = [
-    {
-      id: 1,
-      path: '/',
-      text: 'Books',
-    },
-    {
-      id: 2,
-      path: '/categories',
-      text: 'Catgories',
-    },
-  ];
-
-  const navStyle = {
-    marginBottom: '3rem',
-  };
-
-  const headerStyle = {
-    display: 'inline-block',
-    marginRight: '2rem',
-  };
-  return (
-
-    <nav style={navStyle}>
-      <h1 style={headerStyle}>BookCMS</h1>
-      <ul className="menu">
-        {links.map((link) => (
-          <li key={link.id} className="menuItem">
-            <NavLink to={link.path} className="active-link">
-              {link.text}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
+const Navigation = () => (
+  <header className={styles.header}>
+    <h1>Bookstore CMS</h1>
+    <nav className={styles.nav}>
+      <NavLink to="/">BOOKS</NavLink>
+      <NavLink to="/categories">CATEGORIES</NavLink>
     </nav>
-  );
-};
+    <Outlet />
+  </header>
+);
 
-export default Navbar;
+export default Navigation;
