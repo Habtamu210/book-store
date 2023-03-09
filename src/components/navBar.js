@@ -1,19 +1,16 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router-dom';
+import styles from './styles/navBar.css';
 
-function Navbar() {
-  return (
-    <nav>
-      <ul>
-        <li>
-          <Link to="/books">Books</Link>
-        </li>
-        <li>
-          <Link to="/categories">Categories</Link>
-        </li>
-      </ul>
+const Navigation = () => (
+  <header className={styles.header}>
+    <h1>Bookstore CMS</h1>
+    <nav className={styles.nav}>
+      <NavLink to="/">BOOKS</NavLink>
+      <NavLink to="/categories">CATEGORIES</NavLink>
     </nav>
-  );
-}
+    <Outlet />
+  </header>
+);
 
-export default Navbar;
+export default Navigation;

@@ -1,24 +1,25 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkStatus } from '../redux/catagories/catagorieSlice';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { checktheStatus } from '../redux/catagories/catagorieSlice';
+import styles from './styles/catagories.css';
 
-function Categories() {
+const Categories = () => {
   const dispatch = useDispatch();
-  const { status } = useSelector((state) => state.categories);
-
-  const handleCheckStatus = () => {
-    dispatch(checkStatus());
+  const [display, setDisplay] = useState(true);
+  const categoryHandle = () => {
+    setDisplay(false);
+    dispatch(checktheStatus());
   };
-
   return (
-    <div>
-      <h1>Categories</h1>
-      <button type="button" onClick={handleCheckStatus}>Check status</button>
-      <p>
-        {status}
-      </p>
+    <div className={styles.button}>
+      { display && <button className={styles.btn} type="button" onClick={categoryHandle}>Check status</button>}
+      {
+        display ? (<p />) : (
+          <p>Under Construction</p>
+        )
+      }
     </div>
   );
-}
+};
 
 export default Categories;
