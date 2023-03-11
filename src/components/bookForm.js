@@ -1,59 +1,44 @@
-import { useDispatch } from 'react-redux';
 import React, { useState } from 'react';
-import { v4 as uuidv4 } from 'uuid';
-import { booksActions, postBook } from '../redux/books/bookSlice';
-import styles from './styles/bookForm.css';
+import { v4 as uuidv4 } from 'uuid'; /* Generate a random ID */
+import { useDispatch } from 'react-redux';
+import { addBook } from '../redux/books/bookSlice';
 
-const Form = () => {
+function Form() {
+  const initial = {
+    author: '',
+    title: '',
+  };
+  const [newBook, setNewBook] = useState(initial);
+
+  const inputHandler = (e) => {
+    setNewBook({
+      ...newBook,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   const dispatch = useDispatch();
-  const [title, setTitle] = useState('');
-  const [author, setAuthor] = useState('');
 
-  const onSetTitle = (event) => {
-    setTitle(event.target.value);
-  };
-
-  const onSetAuthor = (event) => {
-    setAuthor(event.target.value);
-  };
-
-  const onFormSubmit = (e) => {
+  const submitHandler = (e) => {
     e.preventDefault();
-    if (!title.trim() || !author.trim()) return;
-
-    const bookData = {
+    dispatch(addBook({
+      ...newBook,
       item_id: uuidv4(),
-      title,
-      author,
-      category: 'Fiction',
-    };
-    dispatch(booksActions.addBook(bookData));
-    dispatch(postBook(bookData));
-    setTitle('');
-    setAuthor('');
+      category: 'Miscellaneous',
+    }));
+    setNewBook(initial);
   };
 
   return (
-    <form onSubmit={onFormSubmit}>
-      <h3>ADD NEW BOOK</h3>
-      <input
-        className={styles.form}
-        value={title}
-        onChange={onSetTitle}
-        type="text"
-        placeholder="Book Title"
-        required
-      />
-      <input
-        className={styles.form}
-        value={author}
-        onChange={onSetAuthor}
-        type="text"
-        placeholder="Book Author"
-        required
-      />
-      <button type="submit">Add Book</button>
-    </form>
+    <div className="m-3">
+      <h2 className="form-title">ADD NEW BOOK</h2>
+      <form className="book-card display-flex form-container" onSubmit={submitHandler}>
+        <input className="p-1" type="text" name="title" placeholder="Book title" onChange={inputHandler} value={newBook.title} required />
+        <input className="p-1" type="text" name="author" placeholder="Book author" onChange={inputHandler} value={newBook.author} required />
+        <button className="p-1 form-button button" type="submit">ADD BOOK</button>
+      </form>
+    </div>
   );
-};
+}
+
 export default Form;
