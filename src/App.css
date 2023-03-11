@@ -74,8 +74,19 @@ form input[type=text] {
   margin: 3em;
 }
 
+.curr {
+  font-size: 18px;
+  font-weight: 50;
+}
+
 .mt-1 {
   margin-top: 1em;
+  background-color: #32a0ff;
+  color: #fff;
+  width: 148px;
+  height: 32px;
+  border: 2px solid #3293e7;
+  border-radius: 6px;
 }
 
 .p-1 {

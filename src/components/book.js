@@ -50,7 +50,7 @@ function Book({ title, author, id }) {
           Completed
         </div>
         <div>
-          <h4>CURRENT CHAPTER</h4>
+          <h4 className="curr">CURRENT CHAPTER</h4>
           <div>
             Chapter
             {}
