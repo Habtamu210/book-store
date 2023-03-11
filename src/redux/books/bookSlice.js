@@ -1,91 +1,61 @@
-/* eslint-disable no-param-reassign */
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axios from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 
-const url = 'https://us-central1-bookstore-api-e63c8.cloudfunctions.net/bookstoreApi/apps/k8MdY5XhccnfoorlnLjO';
+const URL = 'https://us-central1-bookstore-api-e63c8.cloudfunctions.net/bookstoreApi/apps/HQ4dyPd09pUjSNKdipg5/books';
+const GET_BOOK = 'bookstore/books/GET_BOOK';
+const ADD_BOOK = 'bookstore/books/ADD_BOOK';
+const REMOVE_BOOK = 'bookstore/books/REMOVE_BOOK';
 
-export const postBook = createAsyncThunk('books/postBook',
-  async (bookData, thunkApi) => {
-    try {
-      const resData = await axios.post(`${url}/books`, bookData);
-      return resData.data;
-    } catch (error) {
-      return thunkApi.rejectWithValue(error?.data?.message || 'Something went wrong');
-    }
-  });
-
-export const getBooks = createAsyncThunk('books/getBooks', async (_, thunkApi) => {
-  try {
-    const res = await axios(`${url}/books`);
-    return res.data;
-  } catch (error) {
-    return thunkApi.rejectWithValue(
-      error?.data?.message || 'Something went wrong',
-    );
-  }
-});
-
-export const deleteBook = createAsyncThunk('books/deleteBook', async (id, thunkApi) => {
-  try {
-    const res = await axios.delete(`${url}/books/${id}`);
-    return res.data;
-  } catch (error) {
-    return thunkApi.rejectWithValue(
-      error?.data?.message || 'Something went wrong',
-    );
-  }
-});
-
-const initialState = {
-  books: [],
-  isLoading: false,
-};
-
-const bookSlice = createSlice({
-  name: 'books',
-  initialState,
-  reducers: {
-    addBook: (state, action) => {
-      const newBook = action.payload;
-      // eslint-disable-next-line no-param-reassign
-      state.books = [...state.books, newBook];
-    },
-    removeBook: (state, action) => {
-      const bookId = action.payload;
-      return {
-        ...state,
-        books: state.books.filter((book) => book.item_id !== bookId),
-      };
-    },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(postBook.pending, (state) => {
-      state.isLoading = true;
-    })
-      .addCase(postBook.fulfilled, (state) => {
-        state.isLoading = false;
-      })
-      .addCase(postBook.rejected, (state) => {
-        state.isLoading = true;
+export default function reducer(state = [], action) {
+  const list = [];
+  switch (action.type) {
+    case `${ADD_BOOK}/fulfilled`:
+      return [...state, action.payload];
+    case `${REMOVE_BOOK}/fulfilled`:
+      return state.filter((item) => item.item_id !== action.payload);
+    case `${GET_BOOK}/fulfilled`:
+      Object.keys(action.payload).forEach((element) => {
+        const book = action.payload[element][0];
+        book.item_id = element;
+        list.push(book);
       });
-    builder.addCase(getBooks.pending, (state) => {
-      state.isLoading = true;
-    })
-      .addCase(getBooks.fulfilled, (state, action) => {
-        state.isLoading = false;
-        const resData = action.payload;
-        const newBookArray = Object.keys(resData).map((id) => {
-          const bookObj = resData[id][0];
-          bookObj.item_id = id;
-          return bookObj;
-        });
-        state.books = newBookArray;
-      })
-      .addCase(getBooks.rejected, (state) => {
-        state.isLoading = false;
-      });
-  },
+      return list;
+    default:
+      return state;
+  }
+}
+
+export const addBook = createAsyncThunk(ADD_BOOK, async (obj) => {
+  await fetch(URL,
+    {
+      method: 'POST',
+      body: JSON.stringify(obj),
+      headers: {
+        'content-Type': 'application/json; charset=UTF-8',
+      },
+    });
+  return obj;
 });
 
-export const booksActions = bookSlice.actions;
-export default bookSlice.reducer;
+export const removeBook = createAsyncThunk(REMOVE_BOOK, async (id) => {
+  await fetch(`${URL}/${id}`,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({ item_id: id }),
+      headers: {
+        'content-Type': 'application/json; charset=UTF-8',
+      },
+    });
+  return id;
+});
+
+export const getBook = createAsyncThunk(GET_BOOK, async () => {
+  const response = await fetch(URL,
+    {
+      method: 'GET',
+      headers: {
+        'content-Type': 'application/json; charset=UTF-8',
+      },
+    });
+  const result = await response.json();
+  return result;
+});

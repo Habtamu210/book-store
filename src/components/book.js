@@ -1,62 +1,75 @@
-/* eslint-disable */
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
-import { booksActions, deleteBook } from '../redux/books/bookSlice';
-import styles from './styles/book.css';
+import { removeBook } from '../redux/books/bookSlice';
 
-const Book = ({
-  id, category, title, author,
-}) => {
+function Book({ title, author, id }) {
   const dispatch = useDispatch();
 
-  const removeBookHandler = (event) => {
-    const { id } = event.target.dataset;
-    dispatch(booksActions.removeBook(id))
-    dispatch(deleteBook(id));
-  }
-  return (
-    <div className={styles.item}>
-      <div className={styles.display}>
-      <div className={styles.info}>
-      <p className={styles.school}>{category}</p>
-      <h3 className={styles.bookName}>{title}</h3>
-      <p className={styles.author}>{author}</p>
-      </div>
-      <div className={styles.btns}>
-      <button type='button'>Comments</button>
-      <div className={styles.gery}></div>
-      <button type="button" data-id={id} onClick={removeBookHandler}>Remove</button>
-      <div className={styles.gery}></div>
-      <button type='button'>Edit</button>
-      </div>
-      </div>
+  const removeHandler = (id) => {
+    dispatch(removeBook(id));
+  };
 
-      <div className={styles.contain}>
-        <div className={styles.ovalContainer}>
-          <div className={styles.Oval} />
+  const category = 'Miscellaneous';
+
+  return (
+    <li className="display-flex m-3 space-between book-card">
+      <div>
+        <ul>
+          <li>{category}</li>
+          <li><h2>{title}</h2></li>
+          <li>{author}</li>
+        </ul>
+        <ul className="interactions display-flex">
+          <li>
+            <button type="button">
+              Comments
+            </button>
+          </li>
+          <li>
+            <button type="button" onClick={() => { removeHandler(id); }}>
+              Remove
+            </button>
+          </li>
+          <li>
+            <button type="button">
+              Edit
+            </button>
+          </li>
+        </ul>
+
+      </div>
+      <div className="display-flex space-between book-card-details">
+        <div className="display-flex">
+          <span className="completed" />
+          {48}
+          %
+          {' '}
+          <br />
+          {' '}
+          Completed
         </div>
         <div>
-          <div className={styles.completion}>98%</div>
-          <div className={styles.completed}>completed</div>
+          <h4>CURRENT CHAPTER</h4>
+          <div>
+            Chapter
+            {}
+            :
+            {}
+          </div>
+          <div>
+            <button className="mt-1" type="button">Update Progress</button>
+          </div>
         </div>
       </div>
-
-      <div className={styles.bar}></div>
-      <div className={styles.chapterContainer}>
-        <div className={styles.chapterone}>CURRENT CHAPTER</div>
-        <div className={styles.chapter}>Chapter Twelve</div>
-        <div className={styles.chapterBtn}><span className={styles.update}>UPDATE PROGRESS</span></div>
-      </div>
-    </div>
+    </li>
   );
-};
+}
 
 Book.propTypes = {
-  id: PropTypes.string.isRequired,
-  // category: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 export default Book;
